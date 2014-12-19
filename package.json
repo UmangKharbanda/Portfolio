@@ -1,0 +1,10 @@
+{
+  "name": "Portfolio",
+  "version": "1.0.0",
+  "description": "Umang Kharbanda Online Portfolio as a Web Designer",
+  "repository": {
+    "type": "git",
+    "url": "?.git"
+  },
+  "author": "Umang Kharbanda"
+}
