@@ -1,9 +1,10 @@
 var gulp = require('gulp'),
 	gutil = require('gulp-util'),
 	browserify = require('gulp-browserify'),
+	compass = require('gulp-compass'),
 	concat = require('gulp-concat');
 
-var jsSources;
+var jsSources, sassSources;
 
 jsSources = [
 	'components/scripts/require.js',
@@ -14,12 +15,16 @@ jsSources = [
 	'components/scripts/collapse.js',
 	'components/scripts/dropdown.js',
 	'components/scripts/modal.js',
+	'components/scripts/tooltip.js',
 	'components/scripts/popover.js',
 	'components/scripts/scrollspy.js',
 	'components/scripts/tab.js',
-	'components/scripts/tooltip.js',
 	'components/scripts/transition.js',
 	'components/scripts/typed.js'
+];
+
+sassSources = [
+	'components/sass/style.scss'
 ];
 
 gulp.task('js', function(){
@@ -27,4 +32,15 @@ gulp.task('js', function(){
 		.pipe(concat('script.js'))
 		.pipe(browserify())
 		.pipe(gulp.dest('builds/development/js'))
+});
+
+gulp.task('compass', function(){
+	gulp.src(sassSources)
+		.pipe(compass({
+			sass:  'components/sass',
+			image: 'builds/development/images',
+			style: 'expanded'
+		}))
+		.on('error',gutil.log)
+		.pipe(gulp.dest('builds/development/css'))
 });
