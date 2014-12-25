@@ -5,8 +5,9 @@ var gulp = require('gulp'),
 	connect = require('gulp-connect'),
 	concat = require('gulp-concat');
 
-var jsSources, sassSources;
+var jsSources, sassSources, htmlSources;
 
+htmlSources = ['builds/development/*.html'];
 jsSources = [
 	'components/scripts/require.js',
 	'components/scripts/affix.js',
@@ -52,13 +53,19 @@ gulp.task('watch', function(){
 	gulp.watch(jsSources, ['js']),
 	gulp.watch(sassSources, ['compass']),
 	gulp.watch('components/sass/bootstrap/*.scss', ['compass']);
+	gulp.watch(htmlSources, ['html']);
 });
 
-gulp.task('default', ['js', 'compass', 'connect', 'watch']);
+gulp.task('default', ['js', 'compass', 'html', 'connect', 'watch']);
 
 gulp.task('connect', function(){
 	connect.server({
 		root: 'builds/development',
 		livereload: true
 	});
+});
+
+gulp.task('html', function(){
+	gulp.src(htmlSources)
+		.pipe(connect.reload())
 });
