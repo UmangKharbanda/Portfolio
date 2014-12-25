@@ -5,9 +5,18 @@ var gulp = require('gulp'),
 	connect = require('gulp-connect'),
 	concat = require('gulp-concat');
 
-var jsSources, sassSources, htmlSources;
+var jsSources, sassSources, htmlSources, env, outputDir;
 
-htmlSources = ['builds/development/*.html'];
+if(env === 'development') {
+	outputDir = 'builds/development/';
+} else {
+	outputDir = 'builds/production/'
+}
+
+
+env = process.env.NODE_ENV || 'production';
+
+htmlSources = [outputDir + '*.html'];
 jsSources = [
 	'components/scripts/require.js',
 	'components/scripts/affix.js',
@@ -33,7 +42,7 @@ gulp.task('js', function(){
 	gulp.src(jsSources)
 		.pipe(concat('script.js'))
 		.pipe(browserify())
-		.pipe(gulp.dest('builds/development/js'))
+		.pipe(gulp.dest(outputDir + 'js'))
 		.pipe(connect.reload())
 });
 
@@ -41,11 +50,11 @@ gulp.task('compass', function(){
 	gulp.src(sassSources)
 		.pipe(compass({
 			sass:  'components/sass',
-			image: 'builds/development/images',
+			image: outputDir +'images',
 			style: 'expanded'
 		}))
 		.on('error',gutil.log)
-		.pipe(gulp.dest('builds/development/css'))
+		.pipe(gulp.dest(outputDir + 'css'))
 		.pipe(connect.reload())
 });
 
@@ -60,7 +69,7 @@ gulp.task('default', ['js', 'compass', 'html', 'connect', 'watch']);
 
 gulp.task('connect', function(){
 	connect.server({
-		root: 'builds/development',
+		root: outputDir,
 		livereload: true
 	});
 });
