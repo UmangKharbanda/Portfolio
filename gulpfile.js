@@ -3,6 +3,9 @@ var gulp = require('gulp'),
 	browserify = require('gulp-browserify'),
 	compass = require('gulp-compass'),
 	connect = require('gulp-connect'),
+	gulpif = require('gulp-if'),
+	uglify = require('gulp-uglify'),
+	minifyCSS = require('gulp-minify-css'),
 	concat = require('gulp-concat');
 
 var jsSources, sassSources, htmlSources, env, outputDir;
@@ -42,6 +45,7 @@ gulp.task('js', function(){
 	gulp.src(jsSources)
 		.pipe(concat('script.js'))
 		.pipe(browserify())
+		.pipe(gulpif(env === 'production', uglify()))
 		.pipe(gulp.dest(outputDir + 'js'))
 		.pipe(connect.reload())
 });
@@ -54,6 +58,7 @@ gulp.task('compass', function(){
 			style: 'expanded'
 		}))
 		.on('error',gutil.log)
+		.pipe(gulpif(env === 'production', minifyCSS()))
 		.pipe(gulp.dest(outputDir + 'css'))
 		.pipe(connect.reload())
 });
